@@ -1,0 +1,121 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "abc Test App",
+      "description": "API Documentation "
+    },
+    "schemes": ["http"],
+    "host": "localhost:5000",
+    "basePath": "/api/v1/",
+  
+    "paths": {
+      "/users/signup": {
+        "post": {
+          "tags": ["User"],
+          "summary": "User Registration",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User registration pass only email field value in the body ",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UsersRegistration"
+              }
+            }
+          ],
+  
+          "produces": ["application/json"],
+          "responses": {
+            "201": {
+              "description": "Created",
+              "schema": {
+                "$ref": "#/definitions/UsersRegistration"
+              }
+            },
+            "422": {
+              "description": "validation errors"
+            },
+            "500": {
+              "description": "Database errors"
+            }
+          }
+        }
+      },
+      "/users/login": {
+        "post": {
+          "tags": ["User"],
+          "summary": "Login",
+          "parameters": [
+            {
+              "in": "body",
+              "name": "body",
+              "description": "User login",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/UserLogin"
+              }
+            }
+          ],
+  
+          "produces": ["application/json"],
+          "responses": {
+            "200": {
+              "description": "OK",
+              "schema": {
+                "$ref": "#/definitions/UserLogin"
+              }
+            },
+            "422": {
+              "description": "validation errors"
+            },
+            "406": {
+              "description": "Password not match"
+            },
+            "404": {
+              "description": "User Not found"
+            },
+            "500": {
+              "description": "Database errors"
+            }
+          }
+        }
+      }
+    },
+  
+    "definitions": {
+  
+      "UsersRegistration": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "skills": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "UserLogin": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+  
+          "password": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+  

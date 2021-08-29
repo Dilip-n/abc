@@ -13,7 +13,7 @@ module.exports = {
         const algorithm = "aes-192-cbc";
         // const secret = stage.secret;
 
-        const key = crypto.scryptSync('thisissecrate', "salt", 24);
+        const key = crypto.scryptSync(process.env.SECRET, "salt", 24);
 
         const iv = Buffer.alloc(16, 0); // Initialization vector.
 

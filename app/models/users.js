@@ -8,24 +8,31 @@ const ModelSchema = mongoose.Schema({
   },
   email: {
     type: String,
-    required: true,
+    // required: true,
     lowercase: true,
     unique: true
   },
 
   user_image: [],
 
-  password: {
+  phone: {
     type: String,
-    required: true,
+    // required: true,
+    trim: true,
+    default: "",
+  },
+  GSTN: {
+    type: String,
+    // required: true,
     trim: true,
     default: "",
   },
 
-  skills: {
-    type: [String],
-    index: true,
-  },
+  password:{
+    type: String,
+    required: true,
+   
+  }, 
 
   created_date: {
     type: Date,

@@ -8,7 +8,7 @@ module.exports = {
   passwordDecryption: async (ciphertext) => {
     try {
       const algorithm = "aes-192-cbc";
-      const password = 'thisissecrate';
+      const password = process.env.SECRET;
 
       const key = crypto.scryptSync(password, "salt", 24);
 

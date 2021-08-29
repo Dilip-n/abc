@@ -3,14 +3,17 @@ require("dotenv").config(); // Sets up dotenv as soon as our application starts
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const helmet = require("helmet");
+const cors = require("cors");
 const app = express();
 const logger = require("./app/handlers/logHandlers");
 // const a = require("./config/dev.env")
 const port = process.env.PORT
 const connUri = process.env.DBURI
 
+console.log(process.env.SECRET)
 
-// console.log(a.SECRATE)
+
 
 const router = express.Router();
 
@@ -37,6 +40,40 @@ mongoose.connect(
   }
 );
 
+// Default Helmet Options
+// ================================================
+// contentSecurityPolicy: false, for setting Content Security Policy
+// expectCt: false, for handling Certificate Transparency
+// dnsPrefetchControl: true, controls browser DNS prefetching	✓
+// frameguard: true, to prevent clickjacking	✓
+// hidePoweredBy: true, to remove the X-Powered-By header	✓
+// hpkp: false, for HTTP Public Key Pinning
+// hsts: true, for HTTP Strict Transport Security	✓
+// ieNoOpen: true, sets X-Download-Options for IE8+	✓
+// noCache: false, to disable client-side caching
+// noSniff: true, to keep clients from sniffing the MIME type	✓
+// referrerPolicy: false, to hide the Referer header
+// xssFilter: false, adds some small XSS protections
+app.use(
+  helmet({
+    noCache: false,
+  })
+);
+
+// configure our app to handle CORS requests
+app.use(cors());
+
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization, Access-Control-Allow-Credentials, Access-Control-Allow-Origin"
+  );
+  res.header("Access-Control-Allow-Methods", "PUT, PATCH, GET, POST, DELETE");
+  res.header("Access-Control-Allow-Credentials", "true");
+  next();
+});
+
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -45,6 +82,11 @@ app.use(
 );
 
 const routes = require("./app/routes/index.js");
+
+let swaggerUi = require("swagger-ui-express"),
+  swaggerDocument = require("./app/myapi_doc/swagger.json");
+
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use("/api/v1", routes(router));
 
