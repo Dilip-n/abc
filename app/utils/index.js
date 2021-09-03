@@ -5,7 +5,7 @@ const generateUserToken = require("./generateUserToken");
 const validateToken = require("./validateToken");
 const passwordEncryption = require("./passwordEncryption");
 const passwordDecryption = require("./passwordDecryption");
-//const fileUpload = require("./fileUpload");
+const fileUpload = require("./fileUpload");
 
 
 module.exports = {
@@ -15,5 +15,5 @@ module.exports = {
    VALIDATE_TOKEN: validateToken,
   ENCRYPTION: passwordEncryption,
   DECRYPTION: passwordDecryption,
-  //FILE_UPLOAD: fileUpload,
+  FILE_UPLOAD: fileUpload,
 };

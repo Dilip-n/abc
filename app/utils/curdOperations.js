@@ -21,7 +21,7 @@ module.exports = {
   create: (model, query) => {
     console.log("connected to create");
     let db_model = model.Model;
-    //console.log(db_model);
+    // console.log(model.Model);
     return new Promise(function (resolve, reject) {
       db_model
         .create(query)
@@ -34,23 +34,42 @@ module.exports = {
         });
     });
   },
+  findAll: (model, query, selected)=>{
+    let db_model = model.Model;
 
-  // update: (model, query) => {
-  //   let db_model = model.Model;
-  //   // console.log(db_model)
-  //   // console.log(query)
-  //   return new Promise(function (resolve, reject) {
-  //     db_model
-  //       .updateOne(query[0], query[1], query[2])
-  //       .then((response) => {
-  //         //console.log("-- update response ", response);
-  //         resolve(response);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       });
-  //   });
-  // },
+    return new Promise(function(resolve, reject){
+      db_model
+      .find(query)
+      .select(selected)
+      .then((response) => {
+        resolve(response);
+      })
+      .catch((err)=> {
+        reject(err);
+      })
+    })
+
+  },
+
+ 
+
+
+  update: (model, query) => {
+    let db_model = model.Model;
+    // console.log(db_model)
+    // console.log(query)
+    return new Promise(function (resolve, reject) {
+      db_model
+        .updateOne(query[0], query[1], query[2])
+        .then((response) => {
+          //console.log("-- update response ", response);
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
   // findAll: (model, query, selected, populate, sort) => {
   //   let db_model = model.Model;
   //   //console.log(selected);
@@ -69,21 +88,23 @@ module.exports = {
   //       });
   //   });
   // },
-  // delete: (model, query) => {
-  //   let db_model = model.Model;
-  //   //console.log(db_model)
-  //   return new Promise(function (resolve, reject) {
-  //     db_model
-  //       .deleteOne(query)
-  //       .then((response) => {
-  //         //console.log("-- delete ", response);
-  //         resolve(response);
-  //       })
-  //       .catch((err) => {
-  //         reject(err);
-  //       });
-  //   });
-  // },
+  delete: (model, query) => {
+    let db_model = model.Model;
+    //console.log(db_model)
+    return new Promise(function (resolve, reject) {
+      db_model
+        .deleteOne(query)
+        .then((response) => {
+          //console.log("-- delete ", response);
+          resolve(response);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
+
+
   // //mongodb aggregation pipeline
   // aggregation: (model, pipeline) => {
   //   let db_model = model.Model;

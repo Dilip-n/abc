@@ -1,45 +1,33 @@
+const number = require("joi/lib/types/number");
 const mongoose = require("mongoose");
 
 const ModelSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  email: {
-    type: String,
-    // required: true,
-    lowercase: true,
-    // unique: true
-  },
-
-  user_image: [],
-
-  phone: {
-    type: String,
-    // required: true,
-    trim: true,
-    default: "",
-  },
   GSTN: {
     type: String,
     // required: true,
     trim: true,
-    default: "",
   },
 
-  password:{
-    type: String,
-    required: true,
-   
-  }, 
-  companyName:{
-    type: String,
-    required: true,
-   
-  }, 
-  
+  fullTimeEmployees: {
+    type: Number,
+    // required: true,
+    trim: true,
+  },
 
+  partTimeEmployees: {
+    type: Number,
+    // required: true,
+    // trim: true,
+  },
+
+  totalEmployees:{
+  type:Number
+  },
+
+  servecing: {
+    type: [String],
+    index: true,
+  },
 
   created_date: {
     type: Date,
@@ -53,10 +41,10 @@ ModelSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
 
-  delete userObject.password;
+  
   delete userObject.__v;
 
   return userObject;
 };
 
-module.exports.Model = mongoose.model("Users", ModelSchema);
+module.exports.Model = mongoose.model("", ModelSchema);

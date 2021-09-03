@@ -1,3 +1,4 @@
+
 require("dotenv").config(); // Sets up dotenv as soon as our application starts
 
 const express = require("express");
@@ -11,7 +12,7 @@ const logger = require("./app/handlers/logHandlers");
 const port = process.env.PORT
 const connUri = process.env.DBURI
 
-console.log(process.env.SECRET)
+// console.log(process.env.SECRET)
 
 
 

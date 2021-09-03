@@ -4,11 +4,17 @@ const utils = require("../utils");
 
 
 module.exports = (router) => {
-  router.route("/users/signup").post(userDetailsController.signup);
+  router.route("/users/signup").post(userDetailsController.signup); //userSignin
 
-  router.route("/users/login").post(userDetailsController.login);
+  router.route("/users/login").post(userDetailsController.login); // userLogin
 
   router
-  .route("/users/get-profile")
-  .get(tokenValidation, userDetailsController.getUserDetails);
+  .route("/users/get-companydetails")
+  .get(tokenValidation, userDetailsController.getUserCompanyDetails); // getuserCompanyDetails
+
+  router
+  .route("/userUploadImage/:ID")
+  .post(utils.FILE_UPLOAD.upload_File, userDetailsController.uploadImage);
+
+ 
 }

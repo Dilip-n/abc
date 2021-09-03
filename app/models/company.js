@@ -1,26 +1,14 @@
 const mongoose = require("mongoose");
 
 const ModelSchema = mongoose.Schema({
-  name: {
+  companyName: {
     type: String,
     required: true,
     trim: true,
   },
-  email: {
-    type: String,
-    // required: true,
-    lowercase: true,
-    // unique: true
-  },
+  
+  companyLogo: [],
 
-  user_image: [],
-
-  phone: {
-    type: String,
-    // required: true,
-    trim: true,
-    default: "",
-  },
   GSTN: {
     type: String,
     // required: true,
@@ -28,18 +16,30 @@ const ModelSchema = mongoose.Schema({
     default: "",
   },
 
-  password:{
+  CIN: {
     type: String,
-    required: true,
-   
-  }, 
-  companyName:{
-    type: String,
-    required: true,
-   
-  }, 
-  
+    // required: true,
+    trim: true,
+    default: "",
+  },
 
+  website: {
+    type: String,
+    // required: true,
+    default: "",
+  },
+
+  turnover: {
+    type: String,
+    // required: true,
+    default: "",
+  },
+
+  totalManpower: {
+    type: String,
+    // required: true,
+    default: "",
+  },
 
   created_date: {
     type: Date,
@@ -53,10 +53,10 @@ ModelSchema.methods.toJSON = function () {
   const user = this;
   const userObject = user.toObject();
 
-  delete userObject.password;
+ 
   delete userObject.__v;
 
   return userObject;
 };
 
-module.exports.Model = mongoose.model("Users", ModelSchema);
+module.exports.Model = mongoose.model("Company", ModelSchema);

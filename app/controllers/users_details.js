@@ -6,12 +6,15 @@ module.exports = {
   //===========SignUp=================
   signup: async (req, res) => {
     //validation
+  console.log(req.body.name)
+    
 
     const schema = Joi.object().keys({
       name: Joi.string(),
       email: Joi.string(),
       phone: Joi.string(),
       GSTN: Joi.string(),
+      companyName: Joi.string(),
     });
 
     const checkDetails = {
@@ -19,7 +22,9 @@ module.exports = {
       email: req.body.email,
       phone: req.body.phone,
       GSTN: req.body.GSTN,
+      companyName: req.body.companyName
     };
+    console.log(checkDetails)
 
     Joi.validate(checkDetails, schema, async (err, value) => {
       console.log("inside");
@@ -61,15 +66,85 @@ module.exports = {
               phone: req.body.phone,
               GSTN: req.body.GSTN,
               password: enpass,
+              companyName: req.body.companyName
             };
-            let user = await utils.MODEL_ORM.create(utils.MODEL.users, query2);
+            const user = await utils.MODEL_ORM.create(utils.MODEL.users, query2);
             const payload = {
               _id: user._id,
               name: user.name,
               email: user.email,
               phone: user.phone,
               GSTN: user.GSTN,
+              companyName: user.companyName
             };
+
+
+            // /** Multer gives us file info in req.file object */
+
+            // if (!req.file) {
+            //   res.json({
+            //     error_code: 1,
+            //     err_desc: "No image found",
+            //   });
+            //   return;
+            // }else {
+            //   var file_path = "./Uploads" + req.file.filename;
+        
+            //   var newFile_path = file_path.replace(/-/g, "_"); //Replace - to _
+        
+            //   console.log("file_path ", newFile_path);
+        
+            //   let query1 = {
+            //     _id: user._id,
+            //   };
+        
+            //   console.log("user id is", query1);
+            //   let userFound = await utils.MODEL_ORM.findOne(
+            //     utils.MODEL.users,
+            //     query1
+            //   );
+        
+            //   if (userFound) {
+            //     let updateQuery = [
+            //       {
+            //         _id: user._id,
+            //       },
+            //       {
+            //         $set: {
+            //           user_image: newFile_path,
+            //         },
+            //       },
+            //       {
+            //         w: 1,
+            //       },
+            //     ];
+        
+            //     console.log("updateQuery in params 2", updateQuery);
+            //     let userUpdate = await utils.MODEL_ORM.update(
+            //       utils.MODEL.users,
+            //       updateQuery
+            //     );
+        
+            //     // if (userUpdate.nModified) {
+            //     //   // res.status(200).json({
+            //     //     message1= "user uploaded , updated into DB"
+            //     //   // });
+                  
+            //     // } else {
+            //     //   // res.status(200).json({
+            //     //     message2= "user uploaded but not updated into DB"
+            //     //   // });
+            //     // }
+            //   } 
+            //   // else {
+            //   //   status = 404;
+            //   //   result.message = `user Detail not found for this ID`;
+            //   //   result.status = status;
+            //   //   result.data = {};
+            //   //   // res.status(status).send(result);
+            //   // }
+            // }
+
 
             const token = await utils.GENERATE_TOKEN.generateUserToken(payload);
 
@@ -79,6 +154,7 @@ module.exports = {
               email: user.email,
               phone: user.phone,
               GSTN: user.GSTN,
+              companyName: user.companyName
             };
             logger.info("User Signup success");
 
@@ -159,6 +235,7 @@ module.exports = {
                   name: user.name,
                   phone: user.phone,
                   GSTN: user.GSTN,
+                  companyName: user.companyName
                 };
                 const token = await utils.GENERATE_TOKEN.generateUserToken(
                   payload
@@ -170,6 +247,7 @@ module.exports = {
                   email: user.email,
                   phone: user.phone,
                   GSTN: user.GSTN,
+                  companyName: user.companyName
                 };
                 if (userData) {
                   logger.info("User Login with phone success");
@@ -301,7 +379,7 @@ module.exports = {
     
   },
 
-  getUserDetails: async (req, res) => {
+  getUserCompanyDetails: async (req, res) => {
     const payload = req.decoded;
     console.log("user is", payload);
 
@@ -311,7 +389,13 @@ module.exports = {
 
     console.log("query is", query);
     try {
-      let user = await utils.MODEL_ORM.findOne(utils.MODEL.users, query);
+      let selected = "companyName GSTN";
+      let user = await utils.MODEL_ORM.findOne(utils.MODEL.users, query, selected);
+      
+      // let resp = {}
+      //   resp.companyName = user.companyName
+      //  resp.GSTN = user.GSTN
+
       console.log("user is", user);
       if (user) {
         logger.info("Single user details found");
@@ -342,4 +426,71 @@ module.exports = {
       });
     }
   },
+
+  uploadImage: async(req, res) =>{
+    console.log("inside", req.body.name,req.body.email)
+  /** Multer gives us file info in req.file object */
+    if (!req.file) {
+      res.json({
+        error_code: 1,
+        err_desc: "No image found",
+      });
+      return;
+    }else {
+      var file_path = "./Uploads" + req.file.filename;
+
+      var newFile_path = file_path.replace(/-/g, "_"); //Replace - to _
+
+      console.log("file_path ", newFile_path);
+
+      let query1 = {
+        _id: req.params.ID,
+      };
+
+      console.log("user id is", query1);
+      let userFound = await utils.MODEL_ORM.findOne(
+        utils.MODEL.users,
+        query1
+      );
+
+      if (userFound) {
+        let updateQuery = [
+          {
+            _id: req.params.ID,
+          },
+          {
+            $set: {
+              user_image: newFile_path,
+            },
+          },
+          {
+            w: 1,
+          },
+        ];
+
+        console.log("updateQuery in params 2", updateQuery);
+        let userUpdate = await utils.MODEL_ORM.update(
+          utils.MODEL.users,
+          updateQuery
+        );
+
+        if (userUpdate.nModified) {
+          res.status(200).json({
+            message: "user uploaded , updated into DB",
+          });
+          
+        } else {
+          res.status(200).json({
+            message: "user uploaded but not updated into DB",
+          });
+        }
+      } else {
+        status = 404;
+        result.message = `user Detail not found for this ID`;
+        result.status = status;
+        result.data = {};
+        res.status(status).send(result);
+      }
+    }
+  }
 };
